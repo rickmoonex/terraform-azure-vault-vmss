@@ -1,0 +1,21 @@
+---
+name: Release Module Version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@main
+
+      - uses: codfish/semantic-release-action@v1
+        name: Create release
+        id: semantic
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
