@@ -1,3 +1,9 @@
+resource "null_resource" "user_data" {
+  triggers = {
+    user_data = var.user_data
+  }
+}
+
 resource "azurerm_linux_virtual_machine_scale_set" "vault_cluster" {
   admin_username      = var.ssh_username
   instances           = var.instance_count
@@ -59,6 +65,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "vault_cluster" {
     },
     var.common_tags
   )
+
+  lifecycle {
+    replace_triggered_by = [
+      null_resource.user_data
+    ]
+  }
 }
 
 resource "azurerm_virtual_machine_scale_set_extension" "vault_health" {
